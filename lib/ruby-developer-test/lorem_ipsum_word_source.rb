@@ -1,19 +1,24 @@
 module RubyDeveloperTest
   class LoremIpsumWordSource
 
-    def initialize #(word_streamer)
+    def initialize(file_path)
       @word_stats = {}
       @word_count = 0
       @consonant_stats = {}
+      @word_streamer = ::RubyDeveloperTest::WordStreamers::WordFromFileStreamer.new(
+        file_path
+      )
     end
 
     def run
-
+      loop do
+        break if next_word.nil?
+      end
     end
 
     def next_word
       word = word_streamer.next_word
-      callback_after_next_word(word)
+      callback_after_next_word(word) if word
       word
     end
 
@@ -33,10 +38,6 @@ module RubyDeveloperTest
       @word_count
     end
 
-    def callback
-
-    end
-
     private
 
     def add_padding_to_array(data_array, max_length, filler)
@@ -54,9 +55,7 @@ module RubyDeveloperTest
     end
 
     def word_streamer
-      @word_streamer ||= ::RubyDeveloperTest::WordStreamers::WordFromStringStreamer.new(
-        "lorem,ipsum,ipsum"
-      )
+      @word_streamer
     end
 
     def increase_word_count

@@ -5,7 +5,7 @@ require_relative '_shared/word_source_interface'
 describe RubyDeveloperTest::LoremIpsumWordSource do
 
   let(:klass) { described_class }
-  let(:instance) { klass.new() }
+  let(:instance) { klass.new("foo bar") }
 
   it_behaves_like "a word source"
 
@@ -32,6 +32,15 @@ describe RubyDeveloperTest::LoremIpsumWordSource do
 
   before do
     instance.stub(:word_streamer => word_streamer)
+  end
+
+  context "#run" do
+    let(:comma_separated_string) { long_comma_separated_string }
+
+    it "scans all available words" do
+      instance.run
+      expect(instance.count).to eq 16
+    end
   end
 
   context "#next_word" do
@@ -103,6 +112,10 @@ describe RubyDeveloperTest::LoremIpsumWordSource do
       instance.next_word
       expect(instance.count).to eq 3
     end
+  end
+
+  context "#load_data_from_file" do
+
   end
 
 end
