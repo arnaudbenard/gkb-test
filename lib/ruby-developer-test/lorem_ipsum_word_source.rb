@@ -8,6 +8,7 @@ module RubyDeveloperTest
       @word_streamer = ::RubyDeveloperTest::WordStreamers::WordFromFileStreamer.new(
         file_path
       )
+      @word_match_callbacks = []
     end
 
     def run
@@ -38,6 +39,10 @@ module RubyDeveloperTest
       @word_count
     end
 
+    def add_callback_on_word_match(word, &block)
+      @word_match_callbacks << { :word => word, :block => block }
+    end
+
     private
 
     def add_padding_to_array(data_array, max_length, filler)
@@ -52,6 +57,7 @@ module RubyDeveloperTest
       increase_word_count
       count_unique_words(word)
       count_consonants(word)
+      trigger_word_match_callbacks(word)
     end
 
     def word_streamer
@@ -83,7 +89,10 @@ module RubyDeveloperTest
       end
     end
 
-
-
+    def trigger_word_match_callbacks(word)
+      @word_match_callbacks.each do |callback|
+        callback[:block].call if callback[:word] == word
+      end
+    end
   end
 end

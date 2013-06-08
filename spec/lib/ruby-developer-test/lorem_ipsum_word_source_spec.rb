@@ -114,8 +114,26 @@ describe RubyDeveloperTest::LoremIpsumWordSource do
     end
   end
 
-  context "#load_data_from_file" do
+  context "#add_callback_on_word_match" do
 
+    let(:callbacks_result) {
+      ["found lorem", "found ipsum", "found ipsum", "found lorem", "found ipsum"]
+    }
+    let(:comma_separated_string) { long_comma_separated_string }
+
+    it "adds callback on word match" do
+      result = []
+      instance.add_callback_on_word_match "lorem" do
+        result << "found lorem"
+      end
+      instance.add_callback_on_word_match "ipsum" do
+        result << "found ipsum"
+      end
+      instance.add_callback_on_word_match "foobar" do
+        result << "found foobar"
+      end
+      instance.run
+      expect(result).to eq callbacks_result
+    end
   end
-
 end
