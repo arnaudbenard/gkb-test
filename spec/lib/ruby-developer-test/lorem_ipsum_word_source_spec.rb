@@ -116,8 +116,16 @@ describe RubyDeveloperTest::LoremIpsumWordSource do
 
   context "#add_callback_on_word_match" do
 
-    let(:callbacks_result) {
+    let(:callbacks_result_1) {
       ["found lorem", "found ipsum", "found ipsum", "found lorem", "found ipsum"]
+    }
+
+    let(:callbacks_result_2) {
+      ["found lorem 1", "found lorem 2",
+       "found ipsum 1", "found ipsum 2",
+       "found ipsum 1", "found ipsum 2",
+       "found lorem 1", "found lorem 2",
+       "found ipsum 1", "found ipsum 2"]
     }
     let(:comma_separated_string) { long_comma_separated_string }
 
@@ -133,7 +141,28 @@ describe RubyDeveloperTest::LoremIpsumWordSource do
         result << "found foobar"
       end
       instance.run
-      expect(result).to eq callbacks_result
+      expect(result).to eq callbacks_result_1
+    end
+
+    it "adds multiple callbacks on a single word" do
+      result = []
+      instance.add_callback_on_word_match "lorem" do
+        result << "found lorem 1"
+      end
+      instance.add_callback_on_word_match "lorem" do
+        result << "found lorem 2"
+      end
+      instance.add_callback_on_word_match "ipsum" do
+        result << "found ipsum 1"
+      end
+      instance.add_callback_on_word_match "ipsum" do
+        result << "found ipsum 2"
+      end
+      instance.add_callback_on_word_match "foobar" do
+        result << "found foobar"
+      end
+      instance.run
+      expect(result).to eq callbacks_result_2
     end
   end
 end
