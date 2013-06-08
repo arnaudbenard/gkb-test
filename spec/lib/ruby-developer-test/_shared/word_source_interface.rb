@@ -1,8 +1,6 @@
-require 'spec_helper'
-
 shared_examples_for "a word source" do
 
-  subject { klass.new }
+  subject { instance }
 
   it { should respond_to :run }
   it { should respond_to :next_word }
