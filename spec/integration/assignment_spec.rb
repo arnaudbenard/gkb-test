@@ -1,6 +1,37 @@
 require 'spec_helper'
 
 describe "ruby dev test" do
+  context "word source api" do
+    let(:streamer) {
+      ::RubyDeveloperTest::WordStreamers::WordFromStringStreamer.new(
+        comma_separated_string
+      )
+    }
+    let(:file_path) { File.join(ROOT_DIR, "lorem_ipsum.txt") }
+    let(:comma_separated_string) {
+      "lorem,ipsum,ipsum"
+    }
+    let(:src) { ::RubyDeveloperTest::LoremIpsumWordSource.new(file_path) }
+
+    before do
+      src.stub(:word_streamer).and_return(streamer)
+    end
+
+    it "works as expected" do
+      expect(src.next_word).to eq "lorem"
+      expect(src.next_word).to eq "ipsum"
+      expect(src.next_word).to eq "ipsum"
+      expect(src.top_5_words).to eq ["ipsum","lorem",nil,nil,nil]
+      expect(src.top_5_consonants).to eq ["m","p","s","r","l"]
+      expect(src.count).to eq 3
+    end
+
+    it "runs till it runs out of words" do
+      src.run
+      expect(src.count).to eq 3
+    end
+  end
+
   context "LoremIpsumWordSource that pulls in words from 'lorem_ipsum.txt'" do
 
     let(:instance) { ::RubyDeveloperTest::LoremIpsumWordSource.new(file_path) }
