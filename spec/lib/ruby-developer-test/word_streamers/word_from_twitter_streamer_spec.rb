@@ -4,7 +4,8 @@ require_relative '_shared/word_streamer_interface'
 
 describe RubyDeveloperTest::WordStreamers::WordFromTwitterStreamer do
   let(:klass) { described_class }
-  let(:instance) { klass.new() }
+  let(:instance) { klass.new(timeline_feed_url) }
+  let(:timeline_feed_url) { "https://api.twitter.com/1/statuses/user_timeline.json?screen_name=tweepsum&count=1" }
 
   it_behaves_like "a word streamer"
 

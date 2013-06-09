@@ -4,8 +4,9 @@ require "open-uri"
 module RubyDeveloperTest
   module WordStreamers
     class WordFromTwitterStreamer
-      def initialize
+      def initialize(timeline_feed_url)
         @recent_data_ttl = 60
+        @timeline_feed_url = timeline_feed_url
       end
 
       def next_word
@@ -32,7 +33,7 @@ module RubyDeveloperTest
       end
 
       def fetch_new_data
-        open("https://api.twitter.com/1/statuses/user_timeline.json?screen_name=tweepsum&count=1") {|f| f.read }
+        open(@timeline_feed_url) {|f| f.read }
       end
 
       def recent_data
