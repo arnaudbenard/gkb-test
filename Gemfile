@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'rspec'
-gem 'webmock'
+group :development, :test do
+	gem 'rspec'
+	gem 'webmock'
+end
 
