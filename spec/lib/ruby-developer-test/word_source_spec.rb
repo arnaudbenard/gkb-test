@@ -49,8 +49,20 @@ describe RubyDeveloperTest::WordSource do
       expect(instance.next_word).to eq "next word"
     end
 
-    it "triggers callbacks" do
-      pending
+    context "next word is available" do
+      it "triggers callbacks" do
+        instance.should_receive(:callback_after_next_word).exactly(1).times
+        instance.next_word
+      end
+    end
+
+    context "next word is not available" do
+      let(:comma_separated_string) { "" }
+
+      it "doesn't trigger callbacks" do
+        instance.should_not_receive(:callback_after_next_word)
+        instance.next_word
+      end
     end
   end
 
